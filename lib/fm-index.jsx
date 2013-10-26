@@ -67,7 +67,7 @@ class _uint32impl extends _impl
     override function load (input : BinaryInput) : void
     {
         this._sv.load(input);
-        var maxChar = Math.pow(2, this._sv.bitsize());
+        var maxChar = this._sv.maxCharCode();
         for (var c = 0; c < maxChar; c++)
         {
             this.fmi._rlt[c] = this._sv.rankLessThan(this._sv.size(), c);
@@ -115,7 +115,7 @@ class _arrayimpl extends _impl
     override function load (input : BinaryInput) : void
     {
         this._sv.load(input);
-        var maxChar = Math.pow(2, this._sv.bitsize());
+        var maxChar = this._sv.maxCharCode();
         for (var c = 0; c < maxChar; c++)
         {
             this.fmi._rlt[c] = this._sv.rankLessThan(this._sv.size(), c);
