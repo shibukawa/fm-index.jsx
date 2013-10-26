@@ -123,7 +123,7 @@ class _arrayimpl extends _impl
     }
 }
 
-class FMIndex
+__export__ class FMIndex
 {
     var _substr : string;
     var _ddic : int;
