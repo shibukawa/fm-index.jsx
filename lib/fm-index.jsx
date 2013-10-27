@@ -103,9 +103,15 @@ class _arrayimpl extends _impl
     {
         this._sv.setMaxCharCode(maxChar);
         this._sv.build(s);
-        for (var c = 0; c < maxChar; c++)
+        var usedChars = this._sv.usedChars();
+        for (var i = 0; i < usedChars.length; i++)
         {
+            var c = usedChars[i];
             this.fmi._rlt[c] = this._sv.rankLessThan(this._sv.size(), c);
+            if (usedChars.indexOf(c + 1) == -1)
+            {
+                this.fmi._rlt[c + 1] = this._sv.rankLessThan(this._sv.size(), c + 1);
+            }
         }
     }
     override function dump (output : BinaryOutput) : void

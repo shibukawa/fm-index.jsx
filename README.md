@@ -46,7 +46,7 @@ var FMIndex = require('fm-index.common.js').FMIndex;
 
 ```js
 // use fm-index.amd.js
-define(['fm-index.jsx'], function (fmindex) {
+define(['fm-index.amd.jsx'], function (fmindex) {
 
     var fmindex = fmindex.FMIndex();
     // Write simple usage here!
