@@ -122,7 +122,7 @@ Return position list that includes `keyword`.
 
 ### FMIndex.getSubstring(pos : int, len : int) : string
 
-Return original document content 
+Return original document content.
 
 ### FMIndex.dump(output : BinaryOutput) : void
 

@@ -1,6 +1,10 @@
 Change History
 =================
 
+## 0.2.0 (2013/10/29)
+
+* Fix class structure
+
 ## 0.1.3 (2013/10/26)
 
 * Improve performance

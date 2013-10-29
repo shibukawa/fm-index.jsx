@@ -11,123 +11,6 @@ import "burrows-wheeler-transform.jsx";
 import "binary-support.jsx";
 import "binary-io.jsx";
 
-abstract class _impl
-{
-    var fmi : FMIndex;
-    function constructor (fmi : FMIndex)
-    {
-        this.fmi = fmi;
-    }
-    abstract function clear () : void;
-    abstract function size () : int;
-    abstract function rank (pos : int, code : int) : int;
-    abstract function get (pos : int) : int;
-    abstract function build(maxChar : int, s : string) : void;
-    abstract function dump(output : BinaryOutput) : void;
-    abstract function load(input : BinaryInput) : void;
-}
-
-class _uint32impl extends _impl
-{
-    var _sv : Uint32WaveletMatrix;
-    function constructor (fmi : FMIndex)
-    {
-        super(fmi);
-        this._sv = new Uint32WaveletMatrix();
-    }
-    override function clear () : void
-    {
-        this._sv.clear();
-    }
-    override function size () : int
-    {
-        return this._sv.size();
-    }
-    override function rank (pos : int, code : int) : int
-    {
-        return this._sv.rank(pos, code);
-    }
-    override function get (pos : int) : int
-    {
-        return this._sv.get(pos);
-    }
-    override function build (maxChar : int, s : string) : void
-    {
-        this._sv.setMaxCharCode(maxChar);
-        this._sv.build(s);
-        for (var c = 0; c < maxChar; c++)
-        {
-            this.fmi._rlt[c] = this._sv.rankLessThan(this._sv.size(), c);
-        }
-    }
-    override function dump (output : BinaryOutput) : void
-    {
-        this._sv.dump(output);
-    }
-    override function load (input : BinaryInput) : void
-    {
-        this._sv.load(input);
-        var maxChar = this._sv.maxCharCode();
-        for (var c = 0; c < maxChar; c++)
-        {
-            this.fmi._rlt[c] = this._sv.rankLessThan(this._sv.size(), c);
-        }
-    }
-}
-
-class _arrayimpl extends _impl
-{
-    var _sv : ArrayWaveletMatrix;
-    function constructor (fmi : FMIndex)
-    {
-        super(fmi);
-        this._sv = new ArrayWaveletMatrix();
-    }
-    override function clear () : void
-    {
-        this._sv.clear();
-    }
-    override function size () : int
-    {
-        return this._sv.size();
-    }
-    override function rank (pos : int, code : int) : int
-    {
-        return this._sv.rank(pos, code);
-    }
-    override function get (pos : int) : int
-    {
-        return this._sv.get(pos);
-    }
-    override function build (maxChar : int, s : string) : void
-    {
-        this._sv.setMaxCharCode(maxChar);
-        this._sv.build(s);
-        var usedChars = this._sv.usedChars();
-        for (var i = 0; i < usedChars.length; i++)
-        {
-            var c = usedChars[i];
-            this.fmi._rlt[c] = this._sv.rankLessThan(this._sv.size(), c);
-            if (usedChars.indexOf(c + 1) == -1)
-            {
-                this.fmi._rlt[c + 1] = this._sv.rankLessThan(this._sv.size(), c + 1);
-            }
-        }
-    }
-    override function dump (output : BinaryOutput) : void
-    {
-        this._sv.dump(output);
-    }
-    override function load (input : BinaryInput) : void
-    {
-        this._sv.load(input);
-        var maxChar = this._sv.maxCharCode();
-        for (var c = 0; c < maxChar; c++)
-        {
-            this.fmi._rlt[c] = this._sv.rankLessThan(this._sv.size(), c);
-        }
-    }
-}
 
 __export__ class FMIndex
 {
@@ -135,7 +18,7 @@ __export__ class FMIndex
     var _ddic : int;
     var _ssize : int;
     var _head : int;
-    var _impl : _impl;
+    var _sv : WaveletMatrix;
     var _posdic : int[];
     var _idic : int[];
     var _rlt : int[];
@@ -145,14 +28,7 @@ __export__ class FMIndex
         this._ddic = 0,
         this._head = 0;
         this._substr = "";
-        if (BinarySupport.uint8array)
-        {
-            this._impl = new _uint32impl(this);
-        }
-        else
-        {
-            this._impl = new _arrayimpl(this);
-        }
+        this._sv = new WaveletMatrix();
         this._posdic = [] : int[];
         this._idic = [] : int[];
         this._rlt = [] : int[];
@@ -161,7 +37,7 @@ __export__ class FMIndex
 
     function clear () : void
     {
-        this._impl.clear();
+        this._sv.clear();
         this._posdic.length = 0;
         this._idic.length = 0;
         this._ddic = 0;
@@ -171,17 +47,29 @@ __export__ class FMIndex
 
     function size () : int
     {
-        return this._impl.size();
+        return this._sv.size();
     }
 
     function contentSize () : int
     {
         return this._substr.length;
     }
+
+    function rank (pos : int, code : int) : int
+    {
+        return this._sv.rank(pos, code);
+    }
+
+    function get (pos : int) : int
+    {
+        return this._sv.get(pos);
+    }
+
     __noexport__ function getRows (key : string) : int
     {
         return this.getRows(key, null);
     }
+
     function getRows (key : string, pos : int[]) : int
     {
         var i = key.length - 1;
@@ -201,8 +89,8 @@ __export__ class FMIndex
             }
             i--;
             var c = key.charCodeAt(i);
-            first = this._rlt[c] + this._impl.rank(first - 1, c) + 1;
-            last  = this._rlt[c] + this._impl.rank(last,      c);
+            first = this._rlt[c] + this.rank(first - 1, c) + 1;
+            last  = this._rlt[c] + this.rank(last,      c);
         }
         return 0;
     }
@@ -221,8 +109,8 @@ __export__ class FMIndex
                 pos += (this._posdic[i / this._ddic] + 1);
                 break;
             }
-            var c = this._impl.get(i);
-            i = this._rlt[c] + this._impl.rank(i, c); //LF
+            var c = this.get(i);
+            i = this._rlt[c] + this.rank(i, c); //LF
             pos++;
         }
         return pos % this.size();
@@ -247,8 +135,8 @@ __export__ class FMIndex
         var substr = "";
         while (pos_tmp >= pos)
         {
-            var c = this._impl.get(i);
-            i = this._rlt[c] + this._impl.rank(i, c); //LF
+            var c = this.get(i);
+            i = this._rlt[c] + this.rank(i, c); //LF
             if (pos_tmp < pos_end)
             {
                 substr = String.fromCharCode(c) + substr;
@@ -265,6 +153,7 @@ __export__ class FMIndex
     {
         this.build(ddic, null);
     }
+
     function build(ddic : int, maxChar : Nullable.<int>) : void
     {
         if (maxChar == null)
@@ -276,7 +165,14 @@ __export__ class FMIndex
         this._ssize = s.length;
         this._head = bwt.head();
         this._substr = "";
-        this._impl.build(maxChar, s);
+
+        this._sv.setMaxCharCode(maxChar);
+        this._sv.build(s);
+        for (var c = 0; c < maxChar; c++)
+        {
+            this._rlt[c] = this._sv.rankLessThan(this._sv.size(), c);
+        }
+
         this._ddic = ddic;
         this._buildDictionaries();
     }
@@ -299,8 +195,8 @@ __export__ class FMIndex
             {
                 this._idic[Math.floor(pos / this._ddic)] = i;
             }
-            var c = this._impl.get(i);
-            i = this._rlt[c] + this._impl.rank(i, c); //LF
+            var c = this.get(i);
+            i = this._rlt[c] + this.rank(i, c); //LF
             pos--;
         } while (i != this._head);
     }
@@ -336,7 +232,7 @@ __export__ class FMIndex
         output.dump32bitNumber(this._ddic);
         output.dump32bitNumber(this._ssize);
         output.dump32bitNumber(this._head);
-        this._impl.dump(output);
+        this._sv.dump(output);
         output.dump32bitNumber(this._posdic.length);
         for (var i in this._posdic)
         {
@@ -353,7 +249,12 @@ __export__ class FMIndex
         this._ddic = input.load32bitNumber();
         this._ssize = input.load32bitNumber();
         this._head = input.load32bitNumber();
-        this._impl.load(input);
+        this._sv.load(input);
+        var maxChar = this._sv.maxCharCode();
+        for (var c = 0; c < maxChar; c++)
+        {
+            this._rlt[c] = this._sv.rankLessThan(this._sv.size(), c);
+        }
         var size = input.load32bitNumber();
         for (var i = 0; i < size; i++)
         {
