@@ -1,6 +1,6 @@
 {
   "name": "fm-index.jsx",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "FM-index is the fastest full text search algorithm using a compressed index file. This is FM-index for JSX/JS/AMD/Common.js.",
   "scripts": {
     "build": "grunt build",
@@ -38,7 +38,14 @@
     "grunt-contrib-watch": "~0.5.3",
     "grunt": "~0.4.1",
     "grunt-jsx": ">=0.1.5",
-    "burrows-wheeler-transform.jsx": "~0.1.2",
+    "burrows-wheeler-transform.jsx": "~0.2.1",
+    "wavelet-matrix.jsx": "~0.2.0",
+    "binary-io.jsx": "~0.2.1",
+    "binary-support.jsx": "~0.1.0",
+    "bit-vector.jsx": "~0.3.1"
+  },
+  "peerDependencies": {
+    "burrows-wheeler-transform.jsx": "~0.2.1",
     "wavelet-matrix.jsx": "~0.2.0",
     "binary-io.jsx": "~0.2.1",
     "binary-support.jsx": "~0.1.0",

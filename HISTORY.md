@@ -1,6 +1,10 @@
 Change History
 =================
 
+## 0.2.1 (2013/10/29)
+
+* Update BW transform module version
+
 ## 0.2.0 (2013/10/29)
 
 * Fix class structure

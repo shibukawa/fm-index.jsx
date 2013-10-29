@@ -56,10 +56,10 @@ define(['fm-index.amd.jsx'], function (fmindex) {
 ### Use via standard JSX function
 
 ```html
-<script src="fm-index.js}}" type="text/javascript"></script>
+<script src="fm-index.js" type="text/javascript"></script>
 <script type="text/javascript">
 window.onload = function () {
-    var FMIndex = JSX.require("src/fm-index.js").FMIndex;
+    var FMIndex = JSX.require("lib/fm-index.js").FMIndex;
 });
 </script>
 ```
@@ -67,7 +67,7 @@ window.onload = function () {
 ### Use via global variables
 
 ```html
-<script src="fm-index.global.js}}" type="text/javascript"></script>
+<script src="fm-index.global.js" type="text/javascript"></script>
 <script type="text/javascript">
 window.onload = function () {
     var fmindex = new FMIndex();
