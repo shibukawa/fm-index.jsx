@@ -1,6 +1,6 @@
 {
   "name": "fm-index.jsx",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "FM-index is the fastest full text search algorithm using a compressed index file. This is FM-index for JSX/JS/AMD/Common.js.",
   "scripts": {
     "build": "grunt build",

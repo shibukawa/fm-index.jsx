@@ -1,6 +1,10 @@
 Change History
 =================
 
+## 0.2.2 (2013/10/30)
+
+* Add test code
+
 ## 0.2.1 (2013/10/29)
 
 * Update BW transform module version

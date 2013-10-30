@@ -150,6 +150,43 @@ class _Test extends TestCase
         this.expect(this.fm.getSubstring(22, 23)).toBe('abracadabra mississippi');
     }
 
+    function test_getSubstringWithCompressedWord () : void
+    {
+        function encode (str : string) : string
+        {
+            var codes = ['\u0000', '\u0001', '\u0003', 'a', 'b', 'r', 'c', 'd', 'm', 'i', 's', 'p', ' '];
+            var result = '';
+            for (var i = 0; i < str.length; i++)
+            {
+                result += String.fromCharCode(codes.indexOf(str.charAt(i)));
+            }
+            return result;
+        }
+
+        function decode (str : string) : string
+        {
+            var codes = ['\u0000', '\u0001', '\u0003', 'a', 'b', 'r', 'c', 'd', 'm', 'i', 's', 'p', ' '];
+            var result = '';
+            for (var i = 0; i < str.length; i++)
+            {
+                result += codes[str.charCodeAt(i)];
+            }
+            return result;
+        }
+
+        this.fm = new FMIndex();
+        this.fm.push(encode("abracadabra"));
+        this.fm.push('\u0001');
+        this.fm.push(encode("mississippi"));
+        this.fm.push('\u0001');
+        this.fm.push(encode("abracadabra mississippi"));
+        this.fm.push('\u0001');
+        this.fm.build(3);
+        this.expect(decode(this.fm.getSubstring(0, 11))).toBe('abracadabra');
+        this.expect(decode(this.fm.getSubstring(12, 11))).toBe('mississippi');
+        this.expect(decode(this.fm.getSubstring(24, 23))).toBe('abracadabra mississippi');
+    }
+
     function test_getPosition_boundary () : void
     {
         try
