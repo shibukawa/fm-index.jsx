@@ -187,6 +187,20 @@ class _Test extends TestCase
         this.expect(decode(this.fm.getSubstring(24, 23))).toBe('abracadabra mississippi');
     }
 
+    function test_getSubstringBeforeBuild () : void
+    {
+        this.fm = new FMIndex();
+        this.fm.push("abracadabra");
+        this.fm.push('\u0001');
+        this.fm.push("mississippi");
+        this.fm.push('\u0001');
+        this.fm.push("abracadabra mississippi");
+        this.fm.push('\u0001');
+        this.expect(this.fm.getSubstring(0, 11)).toBe('abracadabra');
+        this.expect(this.fm.getSubstring(12, 11)).toBe('mississippi');
+        this.expect(this.fm.getSubstring(24, 23)).toBe('abracadabra mississippi');
+    }
+
     function test_getPosition_boundary () : void
     {
         try

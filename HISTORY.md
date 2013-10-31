@@ -1,9 +1,10 @@
 Change History
 =================
 
-## 0.2.2 (2013/10/30)
+## 0.2.2 (2013/10/31)
 
-* Add test code
+* Add test code for compressed string
+* getSubstring() can use before build
 
 ## 0.2.1 (2013/10/29)
 

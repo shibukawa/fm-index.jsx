@@ -22,6 +22,7 @@ __export__ class FMIndex
     var _posdic : int[];
     var _idic : int[];
     var _rlt : int[];
+    var _build : boolean;
 
     function constructor ()
     {
@@ -33,6 +34,7 @@ __export__ class FMIndex
         this._idic = [] : int[];
         this._rlt = [] : int[];
         this._rlt.length = 65536;
+        this._build = false;
     }
 
     function clear () : void
@@ -118,6 +120,10 @@ __export__ class FMIndex
 
     function getSubstring (pos : int, len : int) : string
     {
+        if (!this._build)
+        {
+            return this._substr.slice(pos, pos + len);
+        }
         if (pos >= this.size())
         {
             throw new Error("FMIndex.getSubstring() : range error");
@@ -199,6 +205,7 @@ __export__ class FMIndex
             i = this._rlt[c] + this.rank(i, c); //LF
             pos--;
         } while (i != this._head);
+        this._build = true;
     }
 
     function push (doc : string) : void
