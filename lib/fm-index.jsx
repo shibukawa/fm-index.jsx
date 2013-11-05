@@ -33,7 +33,6 @@ __export__ class FMIndex
         this._posdic = [] : int[];
         this._idic = [] : int[];
         this._rlt = [] : int[];
-        this._rlt.length = 65536;
         this._build = false;
     }
 
@@ -108,7 +107,7 @@ __export__ class FMIndex
         {
             if ((i % this._ddic) == 0)
             {
-                pos += (this._posdic[i / this._ddic] + 1);
+                pos += (this._posdic[Math.floor(i / this._ddic)] + 1);
                 break;
             }
             var c = this.get(i);
@@ -143,7 +142,7 @@ __export__ class FMIndex
         {
             var c = this.get(i);
             i = this._rlt[c] + this.rank(i, c); //LF
-            if (pos_tmp < pos_end)
+            if (pos_tmp < pos_end && c != 0)
             {
                 substr = String.fromCharCode(c) + substr;
             }
@@ -153,7 +152,7 @@ __export__ class FMIndex
             }
             pos_tmp--;
         }
-        return substr.replace(String.fromCharCode(0), '');
+        return substr;
     }
     __noexport__ function build(ddic : int) : void
     {
@@ -174,10 +173,12 @@ __export__ class FMIndex
 
         this._sv.setMaxCharCode(maxChar);
         this._sv.build(s);
+        var size = this.size();
         for (var c = 0; c < maxChar; c++)
         {
-            this._rlt[c] = this._sv.rankLessThan(this._sv.size(), c);
+            this._rlt[c] = this._sv.rankLessThan(size, c);
         }
+        this._rlt[maxChar] = 0;
 
         this._ddic = ddic;
         this._buildDictionaries();
@@ -185,7 +186,10 @@ __export__ class FMIndex
 
     function _buildDictionaries () : void
     {
-        for (var i = 0; i < (this._ssize / this._ddic + 1); i++)
+        this._posdic.length = 0;
+        this._idic.length = 0;
+
+        for (var i = 0; i < Math.floor(this._ssize / this._ddic + 1); i++)
         {
             this._posdic.push(0);
             this._idic.push(0);
@@ -258,18 +262,20 @@ __export__ class FMIndex
         this._head = input.load32bitNumber();
         this._sv.load(input);
         var maxChar = this._sv.maxCharCode();
+        var size = this._sv.size();
         for (var c = 0; c < maxChar; c++)
         {
-            this._rlt[c] = this._sv.rankLessThan(this._sv.size(), c);
+            this._rlt[c] = this._sv.rankLessThan(size, c);
         }
+        this._rlt[maxChar] = 0;
         var size = input.load32bitNumber();
         for (var i = 0; i < size; i++)
         {
-            this._posdic.push(input.load32bitNumber());
+            this._posdic[i] = input.load32bitNumber();
         }
         for (var i = 0; i < size; i++)
         {
-            this._idic.push(input.load32bitNumber());
+            this._idic[i] = input.load32bitNumber();
         }
     }
 }

@@ -58,7 +58,7 @@ class _Test extends TestCase
         }
 
         this.didd.push(did);
-        this.fm.build(3, null);
+        this.fm.build(25, null);
         this.str += String.fromCharCode(0); // end_marker
         for (var i = 0; i < this.str.length; i++)
         {
