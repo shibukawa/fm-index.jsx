@@ -1,6 +1,10 @@
 Change History
 =================
 
+## 0.2.4 (2013/11/04)
+
+* Optimize
+
 ## 0.2.3 (2013/11/04)
 
 * Fix: getSubstring() result is broken when ddic size is big

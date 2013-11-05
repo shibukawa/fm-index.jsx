@@ -107,7 +107,7 @@ __export__ class FMIndex
         {
             if ((i % this._ddic) == 0)
             {
-                pos += (this._posdic[Math.floor(i / this._ddic)] + 1);
+                pos += (this._posdic[(i / this._ddic) as int] + 1);
                 break;
             }
             var c = this.get(i);
@@ -130,7 +130,7 @@ __export__ class FMIndex
         var pos_end  = Math.min(pos + len, this.size());
         var pos_tmp  = this.size() - 1;
         var i        = this._head;
-        var pos_idic = Math.floor((pos_end + this._ddic - 2) / this._ddic);
+        var pos_idic = ((pos_end + this._ddic - 2) / this._ddic) as int;
         if (pos_idic < this._idic.length)
         {
             pos_tmp = pos_idic * this._ddic;
@@ -189,7 +189,8 @@ __export__ class FMIndex
         this._posdic.length = 0;
         this._idic.length = 0;
 
-        for (var i = 0; i < Math.floor(this._ssize / this._ddic + 1); i++)
+        var loop = (this._ssize / this._ddic + 1) as int;
+        for (var i = 0; i < loop; i++)
         {
             this._posdic.push(0);
             this._idic.push(0);
@@ -199,14 +200,14 @@ __export__ class FMIndex
         do {
             if ((i % this._ddic) == 0)
             {
-                this._posdic[Math.floor(i / this._ddic)] = pos;
+                this._posdic[(i / this._ddic) as int] = pos;
             }
             if ((pos % this._ddic) == 0)
             {
-                this._idic[Math.floor(pos / this._ddic)] = i;
+                this._idic[(pos / this._ddic) as int] = i;
             }
-            var c = this.get(i);
-            i = this._rlt[c] + this.rank(i, c); //LF
+            var c = this._sv.get(i);
+            i = this._rlt[c] + this._sv.rank(i, c); //LF
             pos--;
         } while (i != this._head);
         this._build = true;
