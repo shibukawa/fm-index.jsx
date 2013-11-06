@@ -182,6 +182,7 @@ __export__ class FMIndex
 
         this._ddic = ddic;
         this._buildDictionaries();
+        this._build = true;
     }
 
     function _buildDictionaries () : void
@@ -210,7 +211,6 @@ __export__ class FMIndex
             i = this._rlt[c] + this._sv.rank(i, c); //LF
             pos--;
         } while (i != this._head);
-        this._build = true;
     }
 
     function push (doc : string) : void
@@ -278,5 +278,6 @@ __export__ class FMIndex
         {
             this._idic[i] = input.load32bitNumber();
         }
+        this._build = true;
     }
 }
