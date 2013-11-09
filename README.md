@@ -1,6 +1,8 @@
 fm-index.jsx
 ===========================================
 
+[![Build Status](https://travis-ci.org/shibukawa/fm-index.jsx.png)](https://travis-ci.org/shibukawa/fm-index.jsx)
+
 Synopsis
 ---------------
 
