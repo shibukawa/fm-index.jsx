@@ -18,7 +18,9 @@
     "amd",
     "commonjs",
     "nodejs",
-    "browser"
+    "browser",
+    "nlp",
+    "search"
   ],
   "main": "./lib/fm-index.jsx",
   "homepage": "https://github.com/shibukawa/fm-index.jsx",
