@@ -84,10 +84,31 @@ $ npm install fm-index.jsx
 
 You should add the following modules to `package.json` if you want to use from JSX:
 
-* burrows-wheeler-transform.jsx
-* wavelet-matrix.jsx
-* binary-io.jsx
-* binary-support.jsx
+* burrows-wheeler-transform.jsx (0.3.x)
+* wavelet-matrix.jsx (0.3.x)
+* binary-io.jsx (0.3.x)
+* bit-vector.jsx (0.4.x)
+* binary-support.jsx (0.2.x)
+
+If you want to use this library from other JSX project, install like the following:
+
+```sh
+$ npm install fm-index.jsx --save-dev
+```
+
+or add like these lines to your parent project's `package.json`:
+
+```js
+   devDependencies: {
+       "fm-index.jsx": "~0.3.0"
+   },
+   peerDepenencies: {
+       "fm-index.jsx": "~0.3.0"
+   }
+```
+
+And add `node_modules/fm-index.jsx/src` as a search path.
+You should add to `peerDepenencies` if your product is library.
 
 API Reference
 ------------------

@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     sampleDir: "samples",
-    libDir: "lib",
+    libDir: "src",
     destDir: "dest",
     testDir: "test",
     docDir: "doc",
@@ -23,79 +23,79 @@ module.exports = function(grunt) {
     jsx: {
       sample: {
         src: ['<%= sampleDir %>/*.jsx'],
-        add_search_path: ['<%= libDir %>', 'node_modules/*/lib'],
+        add_search_path: ['<%= libDir %>', 'node_modules/*/src'],
         dest: '<%= sampleDir %>/',
         executable: 'node'
       },
 
       commonjs: {
-        src: ['lib/*.jsx'],
+        src: ['src/*.jsx'],
         output_rule: {
-            regexp: /lib\/(.+)\.jsx/,
+            regexp: /src\/(.+)\.jsx/,
             replace: 'dest\/$1.common.js'
         },
-        add_search_path: ['<%= libDir %>', 'node_modules/*/lib'],
+        add_search_path: ['<%= libDir %>', 'node_modules/*/src'],
         minify: true,
         release: true,
         linker: 'commonjs-lib'
       },
 
       amd: {
-        src: ['lib/*.jsx'],
+        src: ['src/*.jsx'],
         output_rule: {
-            regexp: /lib\/(.+)\.jsx/,
+            regexp: /src\/(.+)\.jsx/,
             replace: 'dest\/$1.amd.js'
         },
-        add_search_path: ['<%= libDir %>', 'node_modules/*/lib'],
+        add_search_path: ['<%= libDir %>', 'node_modules/*/src'],
         minify: true,
         release: true,
         linker: 'amd-lib'
       },
 
       closure: {
-        src: ['lib/*.jsx'],
+        src: ['src/*.jsx'],
         output_rule: {
-            regexp: /lib\/(.+)\.jsx/,
+            regexp: /src\/(.+)\.jsx/,
             replace: 'dest\/$1.closure.js'
         },
-        add_search_path: ['<%= libDir %>', 'node_modules/*/lib'],
+        add_search_path: ['<%= libDir %>', 'node_modules/*/src'],
         minify: true,
         release: true,
         linker: 'closure-lib'
       },
 
       global: {
-        src: ['lib/*.jsx'],
+        src: ['src/*.jsx'],
         output_rule: {
-            regexp: /lib\/(.+)\.jsx/,
+            regexp: /src\/(.+)\.jsx/,
             replace: 'dest\/$1.global.js'
         },
-        add_search_path: ['<%= libDir %>', 'node_modules/*/lib'],
+        add_search_path: ['<%= libDir %>', 'node_modules/*/src'],
         minify: true,
         release: true,
         linker: 'export-global'
       },
 
       standard: {
-        src: ['lib/*.jsx'],
+        src: ['src/*.jsx'],
         output_rule: {
-            regexp: /lib\/(.+)\.jsx/,
+            regexp: /src\/(.+)\.jsx/,
             replace: 'dest\/$1.js'
         },
-        add_search_path: ['<%= libDir %>', 'node_modules/*/lib'],
+        add_search_path: ['<%= libDir %>', 'node_modules/*/src'],
         release: true,
         minify: true
       },
 
       test: {
         src: ['<%= testDir %>/*.jsx'],
-        add_search_path: ['<%= libDir %>', 'node_modules/*/lib'],
+        add_search_path: ['<%= libDir %>', 'node_modules/*/src'],
         test: true
       },
 
       doc: {
         src: ['<%= libDir %>/*.jsx'],
-        add_search_path: ['<%= libDir %>', 'node_modules/*/lib'],
+        add_search_path: ['<%= libDir %>', 'node_modules/*/src'],
         dest: '<%= docDir %>',
         mode: 'doc'
       }
